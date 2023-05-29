@@ -17,7 +17,7 @@
 
                         string noWhiteSpaceText = RemoveWhiteSpace(fileText);
 
-                        Console.WriteLine("Total characters: " + noWhiteSpaceText);
+                        Console.WriteLine("Total characters: " + noWhiteSpaceText.Length);
 
                         // create array with all letters
                         List<char> lettersArray = noWhiteSpaceText.ToList();
