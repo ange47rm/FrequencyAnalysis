@@ -18,6 +18,17 @@
                         string noWhiteSpaceText = RemoveWhiteSpace(fileText);
 
                         Console.WriteLine("Total characters: " + noWhiteSpaceText.Length);
+
+                        var obj = new LetterCount("a", 13);
+
+                        Console.WriteLine($"{obj.Letter} ({obj.Count})");
+
+                        // for each letter, loop over the array and count how many there are (add case sensitive toggle)
+
+                        // create letter count object and add it to FINAL array (of LetterCount objects)
+
+                        // then loop over FINAL array each letter count object, and for each one, log letter and count
+                        ;
                     }
                     else
                     {
