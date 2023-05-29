@@ -9,22 +9,33 @@
 
                 string? filePath = GetFilePath(args);
 
-                if (filePath != null)
+                try
                 {
-                    Console.WriteLine($"File path: {filePath}");
-
-                    List<string> textLines = new List<string>();
-
-                    textLines = File.ReadAllLines(filePath).ToList();
-
-                    foreach (string line in textLines)
+                    if (!String.IsNullOrEmpty(filePath))
                     {
-                        Console.WriteLine($"{line}");
+                        List<string> textLines = new List<string>();
+
+                        bool fileExists = File.Exists(filePath);
+
+                        textLines = File.ReadAllLines(filePath).ToList();
+
+                        foreach (string line in textLines)
+                        {
+                            Console.WriteLine($"{line}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No valid file name provided. Please provide a valid file name when running the application.");
                     }
                 }
-                else
+                catch (FileNotFoundException)
                 {
-                    Console.WriteLine("No valid file name provided");
+                    Console.WriteLine($"The file \"{filePath}\" could not be found. Please make sure the file is present and that the input file name is correct.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
