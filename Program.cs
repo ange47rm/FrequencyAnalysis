@@ -17,8 +17,6 @@
 
                         string noWhiteSpaceText = RemoveWhiteSpace(fileText);
 
-                        Console.WriteLine("Total characters: " + noWhiteSpaceText.Length);
-
                         // create array with all letters
                         List<char> lettersArray = noWhiteSpaceText.ToList();
 
@@ -41,11 +39,10 @@
                             letterCountList.Add(new LetterCount(letterX.ToString(), count));
                         }
 
+                        List<LetterCount> sortedByCountList = letterCountList.OrderByDescending(letterCount => letterCount.Count).ToList();
+
                         // then loop over FINAL array each letter count object, and for each one, log letter and count
-                        foreach (LetterCount letterCount in letterCountList)
-                        {
-                            Console.WriteLine($"{letterCount.Letter} ({letterCount.Count})");
-                        }
+                        ShowFinalOutput(sortedByCountList, noWhiteSpaceText.Length, 10);
                     }
                     else
                     {
@@ -63,7 +60,28 @@
             }
         }
 
-        public static string? GetFilePath(string[] args)
+        private static void ShowFinalOutput(List<LetterCount> letterCountList, int totalCharacters, int? noOfValuesToShow = null)
+        {
+            Console.WriteLine("Total characters: " + totalCharacters);
+
+            if (noOfValuesToShow != null)
+            {
+                for (int i = 0; i < noOfValuesToShow; i++)
+                {
+                    Console.WriteLine($"{letterCountList[i].Letter} ({letterCountList[i].Count})");
+                }
+            }
+            else
+            {
+                foreach (LetterCount letterCount in letterCountList)
+                {
+                    Console.WriteLine($"{letterCount.Letter} ({letterCount.Count})");
+                }
+            }
+
+        }
+
+        private static string? GetFilePath(string[] args)
         {
             string fileName;
             string filePath;
@@ -80,12 +98,12 @@
             }
         }
 
-        public static string RemoveWhiteSpace(string text)
+        private static string RemoveWhiteSpace(string text)
         {
             return text.Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("\t", "");
         }
 
-        public static List<char> RemoveDuplicatesCharacters(List<char> characters)
+        private static List<char> RemoveDuplicatesCharacters(List<char> characters)
         {
             // a HashSet contains unique values but does not see "X" and "x" as a duplicate
             HashSet<char> uniqueChars = new HashSet<char>();
