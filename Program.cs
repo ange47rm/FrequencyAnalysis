@@ -9,22 +9,35 @@
 
                 string? filePath = GetFilePath(args);
 
+                bool caseSensitivity = DetermineCaseSensitivity(args);
+
                 try
                 {
                     if (!String.IsNullOrEmpty(filePath))
                     {
+                        // get text from text file
                         string fileText = File.ReadAllText(filePath);
 
+                        // remove white spaces
                         string noWhiteSpaceText = RemoveWhiteSpace(fileText);
 
-                        // create array with all letters
+                        // create a List with all letters (characters)
                         List<char> lettersArray = noWhiteSpaceText.ToList();
 
-                        // create array of unique letters
-                        List<char> uniqueLettersArray = RemoveDuplicatesCharacters(lettersArray);
+                        // create list of LetterCount objects
+                        List<LetterCount> letterCountList = new List<LetterCount>();
 
-                        // create final array of LetterCount objects
-                        List<LetterCount> letterCountList = GenerateLetterCountList(uniqueLettersArray, lettersArray);
+                        if (!caseSensitivity)
+                        {
+                            letterCountList = GenerateLetterCountList(lettersArray);
+                        }
+                        else
+                        {
+                            // create array of unique letters (case sensitive, meaning T and t will/may have different counts)
+                            List<char> uniqueLettersArray = RemoveDuplicatesCharacters(lettersArray);
+
+                            letterCountList = GenerateLetterCountList(uniqueLettersArray, lettersArray);
+                        }
 
                         // sort LetterCount objects by Count property in a descending order
                         List<LetterCount> sortedByCountList = letterCountList.OrderByDescending(letterCount => letterCount.Count).ToList();
@@ -48,6 +61,19 @@
             }
         }
 
+        private static bool DetermineCaseSensitivity(string[] args)
+        {
+            bool caseSensitivity = true;
+
+            if (args.Length > 1 && args[1].ToLower() == "ci")
+            {
+                caseSensitivity = false;
+            }
+
+            Console.WriteLine("Case sensitive: " + caseSensitivity);
+            return caseSensitivity;
+        }
+
         private static string? GetFilePath(string[] args)
         {
             string fileName;
@@ -65,15 +91,34 @@
             }
         }
 
-        private static List<LetterCount> GenerateLetterCountList(List<char> uniqueLettersArray, List<char> lettersArray)
+        private static List<LetterCount> GenerateLetterCountList(List<char> lettersList)
         {
             List<LetterCount> letterCountList = new List<LetterCount>();
 
-            // for each letter, loop over the array and count how many there are (add case sensitive toggle)
-            foreach (char letterX in uniqueLettersArray)
+            // for each letter, loop over the array and count how many there are (case insensitive)
+            foreach (char letterX in lettersList)
+            {
+                int count = lettersList.Count(letterY => char.ToLowerInvariant(letterX) == char.ToLowerInvariant(letterY));
+
+                if (!letterCountList.Any(letterCountObj => letterCountObj.Letter.ToLower() == letterX.ToString().ToLower()))
+                    {
+                    letterCountList.Add(new LetterCount(letterX.ToString(), count)); 
+                }
+            }
+
+            return letterCountList;
+        }
+    
+
+        private static List<LetterCount> GenerateLetterCountList(List<char> uniqueLettersList, List<char> initialLettersList)
+        {
+            List<LetterCount> letterCountList = new List<LetterCount>();
+
+            // for each unique letter, loop over the full/initial list of letters and count how many there are (case sensitive)
+            foreach (char letterX in uniqueLettersList)
             {
                 int count = 0;
-                foreach (char letterY in lettersArray)
+                foreach (char letterY in initialLettersList)
                 {
                     if (letterX == letterY) count++;
                 }
@@ -103,7 +148,6 @@
                     Console.WriteLine($"{letterCount.Letter} ({letterCount.Count})");
                 }
             }
-
         }
 
         private static string RemoveWhiteSpace(string text)
@@ -111,17 +155,17 @@
             return text.Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("\t", "");
         }
 
-        private static List<char> RemoveDuplicatesCharacters(List<char> characters)
+        private static List<char> RemoveDuplicatesCharacters(List<char> charactersList)
         {
-            // a HashSet contains unique values but does not see "X" and "x" as a duplicate
-            HashSet<char> uniqueChars = new HashSet<char>();
+            HashSet<char> uniqueCharacters = new HashSet<char>();
             List<char> result = new List<char>();
 
-            foreach (char letter in characters)
+            // a HashSet contains unique values but does not see "X" and "x" as a duplicate
+            foreach (char letter in charactersList)
             {
-                if (!uniqueChars.Contains(letter))
+                if (!uniqueCharacters.Contains(letter))
                 {
-                    uniqueChars.Add(letter);
+                    uniqueCharacters.Add(letter);
                     result.Add(letter);
                 }
             }
