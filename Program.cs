@@ -13,16 +13,9 @@
                 {
                     if (!String.IsNullOrEmpty(filePath))
                     {
-                        List<string> textLines = new List<string>();
+                        string text = File.ReadAllText(filePath);
 
-                        bool fileExists = File.Exists(filePath);
-
-                        textLines = File.ReadAllLines(filePath).ToList();
-
-                        foreach (string line in textLines)
-                        {
-                            Console.WriteLine($"{line}");
-                        }
+                        Console.WriteLine("Total characters: " + text.Length);
                     }
                     else
                     {
