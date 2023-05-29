@@ -13,9 +13,14 @@
                 {
                     if (!String.IsNullOrEmpty(filePath))
                     {
-                        string text = File.ReadAllText(filePath);
+                        string fileText = File.ReadAllText(filePath);
 
-                        Console.WriteLine("Total characters: " + text.Length);
+                        string noWhiteSpaceText = fileText.Replace(" ", "")
+                         .Replace("\r", "")
+                         .Replace("\n", "")
+                         .Replace("\t", "");
+
+                        Console.WriteLine("Total characters: " + noWhiteSpaceText.Length);
                     }
                     else
                     {
