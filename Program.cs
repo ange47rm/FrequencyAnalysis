@@ -24,24 +24,12 @@
                         List<char> uniqueLettersArray = RemoveDuplicatesCharacters(lettersArray);
 
                         // create final array of LetterCount objects
-                        List<LetterCount> letterCountList = new List<LetterCount>();
+                        List<LetterCount> letterCountList = GenerateLetterCountList(uniqueLettersArray, lettersArray);
 
-                        // for each letter, loop over the array and count how many there are (add case sensitive toggle)
-                        foreach (char letterX in uniqueLettersArray)
-                        {
-                            int count = 0;
-                            foreach (char letterY in lettersArray)
-                            {
-                                if (letterX == letterY) count++;
-                            }
-
-                            // create letter count object and add it to FINAL array (of LetterCount objects)
-                            letterCountList.Add(new LetterCount(letterX.ToString(), count));
-                        }
-
+                        // sort LetterCount objects by Count property in a descending order
                         List<LetterCount> sortedByCountList = letterCountList.OrderByDescending(letterCount => letterCount.Count).ToList();
 
-                        // then loop over FINAL array each letter count object, and for each one, log letter and count
+                        // generate final console output 
                         ShowFinalOutput(sortedByCountList, noWhiteSpaceText.Length, 10);
                     }
                     else
@@ -60,27 +48,6 @@
             }
         }
 
-        private static void ShowFinalOutput(List<LetterCount> letterCountList, int totalCharacters, int? noOfValuesToShow = null)
-        {
-            Console.WriteLine("Total characters: " + totalCharacters);
-
-            if (noOfValuesToShow != null)
-            {
-                for (int i = 0; i < noOfValuesToShow; i++)
-                {
-                    Console.WriteLine($"{letterCountList[i].Letter} ({letterCountList[i].Count})");
-                }
-            }
-            else
-            {
-                foreach (LetterCount letterCount in letterCountList)
-                {
-                    Console.WriteLine($"{letterCount.Letter} ({letterCount.Count})");
-                }
-            }
-
-        }
-
         private static string? GetFilePath(string[] args)
         {
             string fileName;
@@ -96,6 +63,47 @@
             {
                 return null;
             }
+        }
+
+        private static List<LetterCount> GenerateLetterCountList(List<char> uniqueLettersArray, List<char> lettersArray)
+        {
+            List<LetterCount> letterCountList = new List<LetterCount>();
+
+            // for each letter, loop over the array and count how many there are (add case sensitive toggle)
+            foreach (char letterX in uniqueLettersArray)
+            {
+                int count = 0;
+                foreach (char letterY in lettersArray)
+                {
+                    if (letterX == letterY) count++;
+                }
+
+                // create letter count object and add it to letterCountList
+                letterCountList.Add(new LetterCount(letterX.ToString(), count));
+            }
+            return letterCountList;
+        }
+
+        private static void ShowFinalOutput(List<LetterCount> letterCountList, int totalCharacters, int? noOfValuesToShow = null)
+        {
+            Console.WriteLine("Total characters: " + totalCharacters);
+
+            // loop over LetterCount object list and for each one, log letter and count
+            if (noOfValuesToShow != null)
+            {
+                for (int i = 0; i < noOfValuesToShow; i++)
+                {
+                    Console.WriteLine($"{letterCountList[i].Letter} ({letterCountList[i].Count})");
+                }
+            }
+            else
+            {
+                foreach (LetterCount letterCount in letterCountList)
+                {
+                    Console.WriteLine($"{letterCount.Letter} ({letterCount.Count})");
+                }
+            }
+
         }
 
         private static string RemoveWhiteSpace(string text)
