@@ -7,15 +7,33 @@
             {
                 Console.WriteLine("Frequency Analysis application started");
 
-                if (args.Length > 0)
+                string? filePath = GetFilePath(args);
+
+                if (filePath != null)
                 {
-                    string arg = args[0];
-                    Console.WriteLine("Args received: " + arg);
+                    Console.WriteLine($"File path: {filePath}");
                 }
                 else
                 {
-                    Console.WriteLine("No arg received.");
+                    Console.WriteLine("No valid file name provided");
                 }
+            }
+        }
+
+        public static string? GetFilePath(string[] args)
+        {
+            string fileName;
+            string filePath;
+
+            if (args.Length > 0)
+            {
+                fileName = args[0];
+                filePath = @$"C:\Code\FrequencyAnalysis\text-files\{fileName}";
+                return filePath;
+            }
+            else
+            {
+                return null;
             }
         }
     }
