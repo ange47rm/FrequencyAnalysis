@@ -15,10 +15,7 @@
                     {
                         string fileText = File.ReadAllText(filePath);
 
-                        string noWhiteSpaceText = fileText.Replace(" ", "")
-                         .Replace("\r", "")
-                         .Replace("\n", "")
-                         .Replace("\t", "");
+                        string noWhiteSpaceText = RemoveWhiteSpace(fileText);
 
                         Console.WriteLine("Total characters: " + noWhiteSpaceText.Length);
                     }
@@ -53,6 +50,11 @@
             {
                 return null;
             }
+        }
+
+        public static string RemoveWhiteSpace(string text)
+        {
+            return text.Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("\t", "");
         }
     }
 }
