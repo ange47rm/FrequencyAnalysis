@@ -20,10 +20,10 @@
                         Console.WriteLine("Total characters: " + noWhiteSpaceText);
 
                         // create array with all letters
-                        char[] lettersArray = noWhiteSpaceText.ToCharArray();
+                        List<char> lettersArray = noWhiteSpaceText.ToList();
 
                         // create array of unique letters
-                        char[] uniqueLettersArray = lettersArray.Distinct().ToArray();
+                        List<char> uniqueLettersArray = RemoveDuplicatesCharacters(lettersArray);
 
                         // create final array of LetterCount objects
                         List<LetterCount> letterCountList = new List<LetterCount>();
@@ -83,6 +83,24 @@
         public static string RemoveWhiteSpace(string text)
         {
             return text.Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("\t", "");
+        }
+
+        public static List<char> RemoveDuplicatesCharacters(List<char> characters)
+        {
+            // a HashSet contains unique values but does not see "X" and "x" as a duplicate
+            HashSet<char> uniqueChars = new HashSet<char>();
+            List<char> result = new List<char>();
+
+            foreach (char letter in characters)
+            {
+                if (!uniqueChars.Contains(letter))
+                {
+                    uniqueChars.Add(letter);
+                    result.Add(letter);
+                }
+            }
+
+            return result;
         }
     }
 }
