@@ -5,7 +5,7 @@
         static void Main(string[] args)
         {
             {
-                Console.WriteLine("Frequency Analysis application started");
+                Console.WriteLine("### Frequency Analysis application started ###");
 
                 string? filePath = GetFilePath(args);
 
@@ -22,32 +22,26 @@
                         string noWhiteSpaceText = RemoveWhiteSpace(fileText);
 
                         // create a List with all letters (characters) - ThefoxidfiwfsibasififwfgThekaposnisf
-                        List<char> lettersArray = noWhiteSpaceText.ToList();
+                        List<char> lettersList = noWhiteSpaceText.ToList();
 
                         // create list of LetterCount objects
                         List<LetterCount> letterCountList = new List<LetterCount>();
 
+                        // create a list of unique letters by removing any duplicates - thefoxidwbsagkpns
+                        List<char> uniqueLettersList = RemoveDuplicatesCharacters(lettersList); 
+
                         if (!caseSensitivity)
                         {
-                            // original array is converted to an array of lower case letters
-                            List<char> lettersArrayLowerCase = new List<char>();
+                            // original list of all letters is converted to an list of lower case letters - thefoxidfiwfsibasififwfgthekaposnisf
+                            List<char> lettersListLowerCase = ConvertCharListToLowerCase(lettersList);
 
-                            foreach (char letter in lettersArray)
-                            {
-                                    lettersArrayLowerCase.Add(Char.ToLower(letter));
-                            }
-                            Console.WriteLine(lettersArrayLowerCase.ToArray()); // thethreedidfeedthedeerthequickbrownfoxjumpedoverthelazydog
-
-                            List<char> uniqueLettersArray = RemoveDuplicatesCharacters(lettersArray);
-
-                            letterCountList = GenerateLetterCountListCS(uniqueLettersArray, lettersArrayLowerCase);
+                            // use uniqueLettersList and full letter list to generate a LetterCount object for each unique letter
+                            letterCountList = GenerateLetterCountList(uniqueLettersList, lettersListLowerCase);
                         }
                         else
                         {
-                            // create array of unique letters (case sensitive, meaning T and t will/may have different counts) - Tasdgwert
-                            List<char> uniqueLettersArray = RemoveDuplicatesCharacters(lettersArray);
-
-                            letterCountList = GenerateLetterCountListCS(uniqueLettersArray, lettersArray);
+                            // use uniqueLettersList and full letter list to generate a LetterCount object for each unique letter
+                            letterCountList = GenerateLetterCountList(uniqueLettersList, lettersList);
                         }
 
                         // sort LetterCount objects by Count property in a descending order
@@ -72,19 +66,6 @@
             }
         }
 
-        private static bool DetermineCaseSensitivity(string[] args)
-        {
-            bool caseSensitivity = true;
-
-            if (args.Length > 1 && args[1].ToLower() == "ci")
-            {
-                caseSensitivity = false;
-            }
-
-            Console.WriteLine("Case sensitive: " + caseSensitivity);
-            return caseSensitivity;
-        }
-
         private static string? GetFilePath(string[] args)
         {
             string fileName;
@@ -102,26 +83,55 @@
             }
         }
 
-        //private static List<LetterCount> GenerateLetterCountListCI(List<char> uniqueLettersList, List<char> initialLettersList)
-        //{
-        //    List<LetterCount> letterCountList = new List<LetterCount>();
+        private static bool DetermineCaseSensitivity(string[] args)
+        {
+            bool caseSensitivity = true;
 
-        //    // for each letter, loop over the array and count how many there are (case insensitive)
-        //    foreach (char letterX in lettersList)
-        //    {
-        //        int count = lettersList.Count(letterY => char.ToLowerInvariant(letterX) == char.ToLowerInvariant(letterY));
+            if (args.Length > 1 && args[1].ToLower() == "ci")
+            {
+                caseSensitivity = false;
+            }
 
-        //        if (!letterCountList.Any(letterCountObj => letterCountObj.Letter.ToLower() == letterX.ToString().ToLower()))
-        //            {
-        //            letterCountList.Add(new LetterCount(letterX.ToString(), count)); 
-        //        }
-        //    }
+            Console.WriteLine("Case sensitive: " + caseSensitivity);
+            return caseSensitivity;
+        }
 
-        //    return letterCountList;
-        //}
-    
+        private static string RemoveWhiteSpace(string text)
+        {
+            return text.Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("\t", "");
+        }
 
-        private static List<LetterCount> GenerateLetterCountListCS(List<char> uniqueLettersList, List<char> initialLettersList)
+        private static List<char> RemoveDuplicatesCharacters(List<char> charactersList)
+        {
+            HashSet<char> uniqueCharacters = new HashSet<char>();
+            List<char> result = new List<char>();
+
+            // a HashSet contains unique values but does not see "X" and "x" as a duplicate
+            foreach (char letter in charactersList)
+            {
+                if (!uniqueCharacters.Contains(letter))
+                {
+                    uniqueCharacters.Add(letter);
+                    result.Add(letter);
+                }
+            }
+
+            return result;
+        }
+
+        private static List<char> ConvertCharListToLowerCase(List<char> lettersList)
+        {
+            List<char> lettersListLowerCase = new List<char>();
+
+            foreach (char letter in lettersList)
+            {
+                lettersListLowerCase.Add(Char.ToLower(letter));
+            }
+
+            return lettersListLowerCase;
+        }
+
+        private static List<LetterCount> GenerateLetterCountList(List<char> uniqueLettersList, List<char> initialLettersList)
         {
             List<LetterCount> letterCountList = new List<LetterCount>();
 
@@ -159,29 +169,6 @@
                     Console.WriteLine($"{letterCount.Letter} ({letterCount.Count})");
                 }
             }
-        }
-
-        private static string RemoveWhiteSpace(string text)
-        {
-            return text.Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace("\t", "");
-        }
-
-        private static List<char> RemoveDuplicatesCharacters(List<char> charactersList)
-        {
-            HashSet<char> uniqueCharacters = new HashSet<char>();
-            List<char> result = new List<char>();
-
-            // a HashSet contains unique values but does not see "X" and "x" as a duplicate
-            foreach (char letter in charactersList)
-            {
-                if (!uniqueCharacters.Contains(letter))
-                {
-                    uniqueCharacters.Add(letter);
-                    result.Add(letter);
-                }
-            }
-
-            return result;
         }
     }
 }
