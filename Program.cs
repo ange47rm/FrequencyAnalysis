@@ -21,7 +21,7 @@
                         // remove white spaces
                         string noWhiteSpaceText = RemoveWhiteSpace(fileText);
 
-                        // create a List with all letters (characters)
+                        // create a List with all letters (characters) - ThefoxidfiwfsibasififwfgThekaposnisf
                         List<char> lettersArray = noWhiteSpaceText.ToList();
 
                         // create list of LetterCount objects
@@ -29,14 +29,25 @@
 
                         if (!caseSensitivity)
                         {
-                            letterCountList = GenerateLetterCountList(lettersArray);
+                            // original array is converted to an array of lower case letters
+                            List<char> lettersArrayLowerCase = new List<char>();
+
+                            foreach (char letter in lettersArray)
+                            {
+                                    lettersArrayLowerCase.Add(Char.ToLower(letter));
+                            }
+                            Console.WriteLine(lettersArrayLowerCase.ToArray()); // thethreedidfeedthedeerthequickbrownfoxjumpedoverthelazydog
+
+                            List<char> uniqueLettersArray = RemoveDuplicatesCharacters(lettersArray);
+
+                            letterCountList = GenerateLetterCountListCS(uniqueLettersArray, lettersArrayLowerCase);
                         }
                         else
                         {
-                            // create array of unique letters (case sensitive, meaning T and t will/may have different counts)
+                            // create array of unique letters (case sensitive, meaning T and t will/may have different counts) - Tasdgwert
                             List<char> uniqueLettersArray = RemoveDuplicatesCharacters(lettersArray);
 
-                            letterCountList = GenerateLetterCountList(uniqueLettersArray, lettersArray);
+                            letterCountList = GenerateLetterCountListCS(uniqueLettersArray, lettersArray);
                         }
 
                         // sort LetterCount objects by Count property in a descending order
@@ -82,7 +93,7 @@
             if (args.Length > 0)
             {
                 fileName = args[0];
-                filePath = @$"C:\Code\FrequencyAnalysis\text-files\{fileName}.txt";
+                filePath = @$"C:\git\Training\FrequencyAnalysis\text-files\{fileName}.txt";
                 return filePath;
             }
             else
@@ -91,26 +102,26 @@
             }
         }
 
-        private static List<LetterCount> GenerateLetterCountList(List<char> lettersList)
-        {
-            List<LetterCount> letterCountList = new List<LetterCount>();
+        //private static List<LetterCount> GenerateLetterCountListCI(List<char> uniqueLettersList, List<char> initialLettersList)
+        //{
+        //    List<LetterCount> letterCountList = new List<LetterCount>();
 
-            // for each letter, loop over the array and count how many there are (case insensitive)
-            foreach (char letterX in lettersList)
-            {
-                int count = lettersList.Count(letterY => char.ToLowerInvariant(letterX) == char.ToLowerInvariant(letterY));
+        //    // for each letter, loop over the array and count how many there are (case insensitive)
+        //    foreach (char letterX in lettersList)
+        //    {
+        //        int count = lettersList.Count(letterY => char.ToLowerInvariant(letterX) == char.ToLowerInvariant(letterY));
 
-                if (!letterCountList.Any(letterCountObj => letterCountObj.Letter.ToLower() == letterX.ToString().ToLower()))
-                    {
-                    letterCountList.Add(new LetterCount(letterX.ToString(), count)); 
-                }
-            }
+        //        if (!letterCountList.Any(letterCountObj => letterCountObj.Letter.ToLower() == letterX.ToString().ToLower()))
+        //            {
+        //            letterCountList.Add(new LetterCount(letterX.ToString(), count)); 
+        //        }
+        //    }
 
-            return letterCountList;
-        }
+        //    return letterCountList;
+        //}
     
 
-        private static List<LetterCount> GenerateLetterCountList(List<char> uniqueLettersList, List<char> initialLettersList)
+        private static List<LetterCount> GenerateLetterCountListCS(List<char> uniqueLettersList, List<char> initialLettersList)
         {
             List<LetterCount> letterCountList = new List<LetterCount>();
 
