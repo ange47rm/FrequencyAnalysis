@@ -15,39 +15,29 @@
                 {
                     if (!String.IsNullOrEmpty(filePath))
                     {
-                        // get text from text file
                         string fileText = File.ReadAllText(filePath);
 
-                        // remove white spaces
                         string noWhiteSpaceText = RemoveWhiteSpace(fileText);
 
-                        // create a List with all letters (characters) - ThefoxidfiwfsibasififwfgThekaposnisf
                         List<char> lettersList = noWhiteSpaceText.ToList();
 
-                        // create list of LetterCount objects
                         List<LetterCount> letterCountList = new List<LetterCount>();
 
-                        // create a list of unique letters by removing any duplicates - thefoxidwbsagkpns
                         List<char> uniqueLettersList = RemoveDuplicatesCharacters(lettersList); 
 
                         if (!caseSensitivity)
                         {
-                            // original list of all letters is converted to an list of lower case letters - thefoxidfiwfsibasififwfgthekaposnisf
                             List<char> lettersListLowerCase = ConvertCharListToLowerCase(lettersList);
 
-                            // use uniqueLettersList and full letter list to generate a LetterCount object for each unique letter
                             letterCountList = GenerateLetterCountList(uniqueLettersList, lettersListLowerCase);
                         }
                         else
                         {
-                            // use uniqueLettersList and full letter list to generate a LetterCount object for each unique letter
                             letterCountList = GenerateLetterCountList(uniqueLettersList, lettersList);
                         }
 
-                        // sort LetterCount objects by Count property in a descending order
                         List<LetterCount> sortedByCountList = letterCountList.OrderByDescending(letterCount => letterCount.Count).ToList();
 
-                        // generate final console output 
                         ShowFinalOutput(sortedByCountList, noWhiteSpaceText.Length, 10);
                     }
                     else
@@ -107,7 +97,6 @@
             HashSet<char> uniqueCharacters = new HashSet<char>();
             List<char> result = new List<char>();
 
-            // a HashSet contains unique values but does not see "X" and "x" as a duplicate
             foreach (char letter in charactersList)
             {
                 if (!uniqueCharacters.Contains(letter))
@@ -136,7 +125,6 @@
         {
             List<LetterCount> letterCountList = new List<LetterCount>();
 
-            // for each unique letter, loop over the full/initial list of letters and count how many there are (case sensitive)
             foreach (char letterX in uniqueLettersList)
             {
                 int count = 0;
@@ -145,7 +133,6 @@
                     if (letterX == letterY) count++;
                 }
 
-                // create letter count object and add it to letterCountList
                 letterCountList.Add(new LetterCount(letterX.ToString(), count));
             }
             return letterCountList;
@@ -155,7 +142,6 @@
         {
             Console.WriteLine("Total characters: " + totalCharacters);
 
-            // loop over LetterCount object list and for each one, log letter and count
             if (noOfValuesToShow != null)
             {
                 for (int i = 0; i < noOfValuesToShow; i++)
