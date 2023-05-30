@@ -69,12 +69,13 @@
         private static string? GetFilePath(string[] args)
         {
             string fileName;
+            string projectFolder = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\..\\"));
             string filePath;
 
             if (args.Length > 0)
             {
                 fileName = args[0];
-                filePath = @$"C:\git\Training\FrequencyAnalysis\text-files\{fileName}.txt";
+                filePath = Path.Combine(projectFolder, "text-files", $"{fileName}.txt");
                 return filePath;
             }
             else
